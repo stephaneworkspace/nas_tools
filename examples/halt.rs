@@ -1,5 +1,6 @@
 use ssh2::Session;
 use std::env;
+use std::io::prelude::*;
 use std::net::TcpStream;
 
 fn main() {
@@ -14,4 +15,14 @@ fn main() {
     let login = &args[1];
     let password = &args[2];
     sess.userauth_password(login, password).unwrap();
+
+    sess.set_banner("-oHostKeyAlgorithms=+ssh-dss").unwrap();
+
+    let mut channel = sess.channel_session().unwrap();
+    channel.exec("halt -n").unwrap();
+    // let mut s = String::new();
+    // channel.read_to_string(&mut s).unwrap();
+    // println!("{}", s);
+    channel.wait_close().unwrap();
+    println!("{}", channel.exit_status().unwrap());
 }
