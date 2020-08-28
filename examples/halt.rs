@@ -6,5 +6,5 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let login = &args[1];
     let password = &args[2];
-    halt(login, password);
+    halt_nas(login, password);
 }
